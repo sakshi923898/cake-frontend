@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
+const backendURL = 'https://cake-backend-t0i0.onrender.com';
+
 function OwnerPage() {
   const [cakes, setCakes] = useState([]);
   const [orders, setOrders] = useState([]);
@@ -22,7 +24,7 @@ function OwnerPage() {
 
   const fetchCakes = async () => {
     try {
-      const res = await axios.get('https://cake-backend-t0i0.onrender.com/api/cakes');
+      const res = await axios.get(`${backendURL}/api/cakes`);
       setCakes(res.data);
     } catch (err) {
       console.error('Error fetching cakes:', err);
@@ -31,7 +33,7 @@ function OwnerPage() {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get('https://cake-backend-t0i0.onrender.com/api/orders');
+      const res = await axios.get(`${backendURL}/api/orders`);
       setOrders(res.data);
     } catch (err) {
       console.error('Error fetching orders:', err);
@@ -56,7 +58,7 @@ function OwnerPage() {
     formData.append('image', newCake.image);
 
     try {
-      await axios.post('https://cake-backend-t0i0.onrender.com/api/cakes', formData);
+      await axios.post(`${backendURL}/api/cakes`, formData);
       alert('Cake added successfully!');
       setNewCake({ name: '', price: '', description: '', image: null });
       fetchCakes();
@@ -69,7 +71,7 @@ function OwnerPage() {
   const handleDeleteCake = async (id) => {
     if (!window.confirm("Are you sure you want to delete this cake?")) return;
     try {
-      await axios.delete(`https://cake-backend-t0i0.onrender.com/api/cakes/${id}`);
+      await axios.delete(`${backendURL}/api/cakes/${id}`);
       fetchCakes();
     } catch (error) {
       console.error('Error deleting cake:', error);
@@ -130,7 +132,7 @@ function OwnerPage() {
                           <>
                             <strong>{order.cakeId.name}</strong><br />
                             <img
-                              src={`https://cake-backend-t0i0.onrender.com${order.cakeId.imageUrl}`}
+                              src={`${backendURL}${order.cakeId.imageUrl}`}
                               alt={order.cakeId.name}
                               width="80"
                               height="60"
@@ -194,7 +196,7 @@ function OwnerPage() {
             {cakes.map(cake => (
               <div key={cake._id} style={{ border: '1px solid #ccc', padding: 10, width: 250 }}>
                 <img
-                  src={`https://cake-backend-t0i0.onrender.com${cake.imageUrl}`}
+                  src={`${backendURL}${cake.imageUrl}`}
                   alt={cake.name}
                   style={{ width: '100%', height: 150, objectFit: 'cover' }}
                 />
