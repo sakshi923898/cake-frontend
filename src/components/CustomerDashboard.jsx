@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+const backendURL = 'https://cake-backend-t0i0.onrender.com';
+
 function CustomerDashboard() {
   const [cakes, setCakes] = useState([]);
   const [selectedCake, setSelectedCake] = useState(null);
@@ -15,8 +17,7 @@ function CustomerDashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    //axios.get('http://localhost:5000/api/cakes')
-    axios.get('https://cake-backend-t0i0.onrender.com/api/cakes')
+    axios.get(`${backendURL}/api/cakes`)
       .then(res => setCakes(res.data))
       .catch(err => console.error('Error fetching cakes:', err));
   }, []);
@@ -27,7 +28,7 @@ function CustomerDashboard() {
 
   const handleOrderSubmit = async () => {
     try {
-      await axios.post('http://localhost:5000/api/orders', {
+      await axios.post(`${backendURL}/api/orders`, {
         ...order,
         cakeId: selectedCake._id,
       });
@@ -63,7 +64,7 @@ function CustomerDashboard() {
         {cakes.map(cake => (
           <div key={cake._id} style={{ border: '1px solid #ccc', padding: 10, width: 250 }}>
             <img
-              src={`http://localhost:5000${cake.imageUrl}`}
+              src={`${backendURL}${cake.imageUrl.startsWith('/') ? cake.imageUrl : `/uploads/${cake.imageUrl}`}`}
               alt={cake.name}
               style={{ width: '100%', height: 150, objectFit: 'cover' }}
             />
@@ -85,7 +86,7 @@ function CustomerDashboard() {
           <hr />
           <h2>Place Your Order for: {selectedCake.name}</h2>
           <img
-            src={`http://localhost:5000${selectedCake.imageUrl}`}
+            src={`${backendURL}${selectedCake.imageUrl.startsWith('/') ? selectedCake.imageUrl : `/uploads/${selectedCake.imageUrl}`}`}
             alt={selectedCake.name}
             style={{ width: 200, height: 120, objectFit: 'cover' }}
           />

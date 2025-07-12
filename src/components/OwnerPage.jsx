@@ -132,7 +132,7 @@ function OwnerPage() {
                           <>
                             <strong>{order.cakeId.name}</strong><br />
                             <img
-                              src={`${backendURL}${order.cakeId.imageUrl}`}
+                              src={`${backendURL}${order.cakeId.imageUrl.startsWith('/') ? order.cakeId.imageUrl : `/uploads/${order.cakeId.imageUrl}`}`}
                               alt={order.cakeId.name}
                               width="80"
                               height="60"
@@ -196,7 +196,7 @@ function OwnerPage() {
             {cakes.map(cake => (
               <div key={cake._id} style={{ border: '1px solid #ccc', padding: 10, width: 250 }}>
                 <img
-                  src={`${backendURL}${cake.imageUrl}`}
+                  src={`${backendURL}${cake.imageUrl.startsWith('/') ? cake.imageUrl : `/uploads/${cake.imageUrl}`}`}
                   alt={cake.name}
                   style={{ width: '100%', height: 150, objectFit: 'cover' }}
                 />
