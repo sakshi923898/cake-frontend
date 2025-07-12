@@ -15,7 +15,8 @@ function CustomerDashboard() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/cakes')
+    //axios.get('http://localhost:5000/api/cakes')
+    axios.get('https://cake-backend-t0i0.onrender.com/api/cakes')
       .then(res => setCakes(res.data))
       .catch(err => console.error('Error fetching cakes:', err));
   }, []);

@@ -22,7 +22,7 @@ function OwnerPage() {
 
   const fetchCakes = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/cakes');
+      const res = await axios.get('https://cake-backend-t0i0.onrender.com/api/cakes');
       setCakes(res.data);
     } catch (err) {
       console.error('Error fetching cakes:', err);
@@ -31,7 +31,7 @@ function OwnerPage() {
 
   const fetchOrders = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/orders');
+      const res = await axios.get('https://cake-backend-t0i0.onrender.com/api/orders');
       setOrders(res.data);
     } catch (err) {
       console.error('Error fetching orders:', err);
@@ -56,7 +56,7 @@ function OwnerPage() {
     formData.append('image', newCake.image);
 
     try {
-      await axios.post('http://localhost:5000/api/cakes', formData);
+      await axios.post('https://cake-backend-t0i0.onrender.com/api/cakes', formData);
       alert('Cake added successfully!');
       setNewCake({ name: '', price: '', description: '', image: null });
       fetchCakes();
@@ -69,7 +69,7 @@ function OwnerPage() {
   const handleDeleteCake = async (id) => {
     if (!window.confirm("Are you sure you want to delete this cake?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/cakes/${id}`);
+      await axios.delete(`https://cake-backend-t0i0.onrender.com/api/cakes/${id}`);
       fetchCakes();
     } catch (error) {
       console.error('Error deleting cake:', error);
@@ -77,7 +77,6 @@ function OwnerPage() {
     }
   };
 
-  // Pagination logic
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
   const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
@@ -131,7 +130,7 @@ function OwnerPage() {
                           <>
                             <strong>{order.cakeId.name}</strong><br />
                             <img
-                              src={`http://localhost:5000${order.cakeId.imageUrl}`}
+                              src={`https://cake-backend-t0i0.onrender.com${order.cakeId.imageUrl}`}
                               alt={order.cakeId.name}
                               width="80"
                               height="60"
@@ -146,7 +145,6 @@ function OwnerPage() {
                 </tbody>
               </table>
 
-              {/* Pagination Controls */}
               <div style={{ marginTop: 15 }}>
                 <button onClick={handlePrevPage} disabled={currentPage === 1}>⬅️ Prev</button>
                 <span style={{ margin: '0 10px' }}>Page {currentPage}</span>
@@ -196,7 +194,7 @@ function OwnerPage() {
             {cakes.map(cake => (
               <div key={cake._id} style={{ border: '1px solid #ccc', padding: 10, width: 250 }}>
                 <img
-                  src={`http://localhost:5000${cake.imageUrl}`}
+                  src={`https://cake-backend-t0i0.onrender.com${cake.imageUrl}`}
                   alt={cake.name}
                   style={{ width: '100%', height: 150, objectFit: 'cover' }}
                 />
