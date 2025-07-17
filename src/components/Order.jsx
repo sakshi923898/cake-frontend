@@ -3,6 +3,8 @@ import axios from 'axios';
 
 function Order() {
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     fetchOrders();
@@ -10,8 +12,7 @@ function Order() {
 
   const fetchOrders = async () => {
     try {
-      //const res = await axios.get('http://localhost:5000/api/orders');
-       const res = await axios.get('https://cake-backend-t0i0.onrender.com/api/orders')
+      const res = await axios.get('https://cake-backend-t0i0.onrender.com/api/orders');
       setOrders(res.data);
     } catch (err) {
       console.error('Error fetching orders:', err);
@@ -20,18 +21,23 @@ function Order() {
 
   const confirmDelivery = async (orderId) => {
     try {
-      await axios.patch(`http://localhost:5000/api/orders/${orderId}/confirm`);
-      alert('Thank you for confirming your delivery!');
+      setLoading(true);
+      await axios.patch(`https://cake-backend-t0i0.onrender.com/api/orders/${orderId}/confirm`);
+      setMessage('Thank you for confirming your delivery!');
       fetchOrders(); // Refresh the list
     } catch (error) {
       console.error('Error confirming order:', error);
-      alert('Failed to confirm delivery');
+      setMessage('Failed to confirm delivery. Please try again.');
+    } finally {
+      setLoading(false);
+      setTimeout(() => setMessage(''), 3000); // Clear message after 3 sec
     }
   };
 
   return (
     <div style={{ padding: 20 }}>
       <h2>Your Orders</h2>
+      {message && <p style={{ color: message.includes('Failed') ? 'red' : 'green' }}>{message}</p>}
       {orders.length === 0 && <p>No orders yet.</p>}
       {orders.map(order => (
         <div key={order._id} style={{ border: '1px solid #ddd', marginTop: 10, padding: 10 }}>
@@ -39,7 +45,7 @@ function Order() {
             <>
               <h4>Cake: {order.cakeId.name}</h4>
               <img
-                src={`http://localhost:5000${order.cakeId.imageUrl}`}
+                src={`https://cake-backend-t0i0.onrender.com${order.cakeId.imageUrl}`}
                 alt={order.cakeId.name}
                 style={{ width: 150, height: 100, objectFit: 'cover' }}
               />
@@ -50,8 +56,11 @@ function Order() {
           <p><strong>Address:</strong> {order.address}</p>
           <p><strong>Status:</strong> {order.status}</p>
           {order.status !== 'Delivered' && (
-            <button onClick={() => confirmDelivery(order._id)}>
-              Confirm Delivery
+            <button
+              onClick={() => confirmDelivery(order._id)}
+              disabled={loading}
+            >
+              {loading ? 'Confirming...' : 'Confirm Delivery'}
             </button>
           )}
         </div>
